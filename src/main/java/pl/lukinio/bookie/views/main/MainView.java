@@ -1,7 +1,5 @@
 package pl.lukinio.bookie.views.main;
 
-import java.util.Optional;
-
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -17,9 +15,11 @@ import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.theme.Theme;
-import pl.lukinio.bookie.views.main.MainView;
-import pl.lukinio.bookie.views.empty.EmptyView;
+import pl.lukinio.bookie.views.about.AboutView;
+import pl.lukinio.bookie.views.home.HomeView;
+import pl.lukinio.bookie.views.login.LoginView;
+
+import java.util.Optional;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -74,7 +74,11 @@ public class MainView extends AppLayout {
     }
 
     private static Tab[] getAvailableTabs() {
-        return new Tab[]{createTab("Empty", EmptyView.class)};
+        return new Tab[]{
+                createTab("Home", HomeView.class),
+                createTab("About Me", AboutView.class),
+                createTab("Sign in/up", LoginView.class),
+        };
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
