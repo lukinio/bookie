@@ -6,6 +6,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
@@ -27,15 +28,17 @@ public class RegisterView extends Div {
         add(registerBox());
     }
 
-    private void register(String username, String password1, String password2) {
+    private void register(String username, String password1, String password2, String email) {
         if (username.trim().isEmpty()) {
             Notification.show("Enter a username");
         } else if (password1.isEmpty()) {
             Notification.show("Enter a password");
         } else if (!password1.equals(password2)) {
             Notification.show("Passwords don't match");
+        } else if (email.trim().isEmpty()) {
+            Notification.show("Enter an email");
         } else {
-            userService.save(new User(username, password1, Role.USER));
+            userService.save(new User(username, password1, email, Role.USER));
             Notification.show("Registration succeeded.");
             UI.getCurrent().navigate("home");
         }
@@ -48,12 +51,15 @@ public class RegisterView extends Div {
         password.setPlaceholder("Password");
         PasswordField confirmPassword = new PasswordField();
         confirmPassword.setPlaceholder("Confirm Password");
+        EmailField emailField = new EmailField();
+        emailField.setPlaceholder("example@example.pl");
 
         Button button = new Button("Register",
                 e -> register(
                         username.getValue(),
                         password.getValue(),
-                        confirmPassword.getValue()
+                        confirmPassword.getValue(),
+                        emailField.getValue()
                 ));
 
         RouterLink login = new RouterLink("login", LoginView.class);
@@ -61,13 +67,14 @@ public class RegisterView extends Div {
         username.setWidthFull();
         password.setWidthFull();
         confirmPassword.setWidthFull();
+        emailField.setWidthFull();
         button.setWidthFull();
         username.isRequired();
         password.isRequired();
         confirmPassword.isRequired();
 
         VerticalLayout box = new VerticalLayout(
-                username, password, confirmPassword, button, login
+                username, password, confirmPassword, emailField, button, login
         );
         box.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
         box.setMaxWidth("25%");
