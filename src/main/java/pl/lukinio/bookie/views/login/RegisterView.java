@@ -2,9 +2,9 @@ package pl.lukinio.bookie.views.login;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
@@ -20,10 +20,12 @@ import pl.lukinio.bookie.views.main.MainView;
 
 @Route(value = "register", layout = MainView.class)
 @PageTitle("Registration")
+@CssImport("./styles/views/login/register-view.css")
 public class RegisterView extends Div {
     @Autowired
     private final transient UserService userService;
     public RegisterView(UserService userService){
+        addClassName("register-view");
         this.userService = userService;
         add(registerBox());
     }
@@ -38,9 +40,18 @@ public class RegisterView extends Div {
         } else if (email.trim().isEmpty()) {
             Notification.show("Enter an email");
         } else {
-            userService.save(new User(username, password1, email, Role.USER));
-            Notification.show("Registration succeeded.");
-            UI.getCurrent().navigate("home");
+            User newUser = new User.Builder()
+                    .username(username)
+                    .password(password1)
+                    .role(Role.USER)
+                    .build();
+
+            if(userService.save(newUser)){
+                Notification.show("Registration succeeded.");
+                UI.getCurrent().navigate("home");
+            }else{
+                Notification.show("Registration fail. User exists");
+            }
         }
     }
 
@@ -76,9 +87,6 @@ public class RegisterView extends Div {
         VerticalLayout box = new VerticalLayout(
                 username, password, confirmPassword, emailField, button, login
         );
-        box.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        box.setMaxWidth("25%");
-        box.setMargin(true);
         box.addClassName("register-box");
         return box;
     }

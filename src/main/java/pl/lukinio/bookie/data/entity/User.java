@@ -19,13 +19,39 @@ public class User extends AbstractEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(){}
+    public static final class Builder {
+        private String username;
+        private String password;
+        private String email;
+        private Role role;
 
-    public User(String username, String password, String email, Role role) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
+        public Builder username(String username){
+            this.username = username;
+            return this;
+        }
+        public Builder password(String password){
+            this.password = password;
+            return this;
+        }
+        public Builder email(String email){
+            this.email = email;
+            return this;
+        }
+        public Builder role(Role role){
+            this.role = role;
+            return this;
+        }
+        public User build(){
+            User user = new User();
+            user.username = this.username;
+            user.password = this.password;
+            user.email = this.email;
+            user.role = this.role;
+            return user;
+        }
+    }
+    public User(){
+        /* default constructor for Spring Data JPA*/
     }
 
     public boolean checkPassword(String password){

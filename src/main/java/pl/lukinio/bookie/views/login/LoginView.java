@@ -1,21 +1,28 @@
 package pl.lukinio.bookie.views.login;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
+import org.springframework.beans.factory.annotation.Autowired;
+import pl.lukinio.bookie.data.entity.User;
+import pl.lukinio.bookie.data.service.UserService;
 import pl.lukinio.bookie.views.main.MainView;
 
 @Route(value = "login", layout = MainView.class)
 @PageTitle("Login")
+@CssImport("./styles/views/login/login-view.css")
 public class LoginView extends Div {
+    @Autowired
+    private final transient UserService userService;
 
-    public LoginView() {
+    public LoginView(UserService userService) {
+        this.userService = userService;
         addClassName("login-view");
         add(loginBox());
     }
@@ -26,7 +33,11 @@ public class LoginView extends Div {
         PasswordField password = new PasswordField();
         password.setPlaceholder("Password");
 
-        Button button = new Button("Login");
+        Button button = new Button("Login",
+                e -> login(
+                        username.getValue(),
+                        password.getValue()
+                ));
 
         RouterLink register = new RouterLink("register", RegisterView.class);
 
@@ -39,10 +50,16 @@ public class LoginView extends Div {
         VerticalLayout box = new VerticalLayout(
                 username, password, button, register
         );
-        box.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER);
-        box.setMaxWidth("25%");
-        box.setMargin(true);
         box.addClassName("login-box");
         return box;
+    }
+
+    private void login(String username, String password) {
+        userService.find(
+                new User.Builder()
+                .username(username)
+                .password(password)
+                .build()
+        );
     }
 }

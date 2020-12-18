@@ -1,11 +1,13 @@
 package pl.lukinio.bookie.data.service;
 
 
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import pl.lukinio.bookie.data.entity.User;
 import pl.lukinio.bookie.data.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,12 +32,20 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public void save(User user) {
+    public boolean save(User user) {
         if (user == null) {
-            LOGGER.log(Level.SEVERE,
-                    "Contact is null. Are you sure you have connected your form to the application?");
-            return;
+            LOGGER.log(Level.SEVERE, "User is null");
+            return false;
+        } else if(userRepository.exists(Example.of(user))) {
+            LOGGER.log(Level.SEVERE, "User exists");
+            return false;
         }
         userRepository.save(user);
+        return true;
     }
+
+    public Optional<User> find(User user){
+        return userRepository.findOne(Example.of(user));
+    }
+
 }
