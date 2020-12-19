@@ -6,4 +6,5 @@ import pl.lukinio.bookie.data.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    User getByUsername(String username);
 }

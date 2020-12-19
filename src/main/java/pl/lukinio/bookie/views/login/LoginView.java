@@ -1,8 +1,10 @@
 package pl.lukinio.bookie.views.login;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -10,8 +12,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.lukinio.bookie.data.entity.User;
-import pl.lukinio.bookie.data.service.UserService;
+import pl.lukinio.bookie.data.service.AuthService;
 import pl.lukinio.bookie.views.main.MainView;
 
 @Route(value = "login", layout = MainView.class)
@@ -19,10 +20,10 @@ import pl.lukinio.bookie.views.main.MainView;
 @CssImport("./styles/views/login/login-view.css")
 public class LoginView extends Div {
     @Autowired
-    private final transient UserService userService;
+    private final transient AuthService authService;
 
-    public LoginView(UserService userService) {
-        this.userService = userService;
+    public LoginView(AuthService authService) {
+        this.authService = authService;
         addClassName("login-view");
         add(loginBox());
     }
@@ -34,10 +35,14 @@ public class LoginView extends Div {
         password.setPlaceholder("Password");
 
         Button button = new Button("Login",
-                e -> login(
-                        username.getValue(),
-                        password.getValue()
-                ));
+                event -> {
+                    try {
+                        authService.authenticate(username.getValue(), password.getValue());
+                        UI.getCurrent().navigate("about");
+                    } catch (AuthService.AuthException e) {
+                        Notification.show("Wrong credentials.");
+                    }
+                });
 
         RouterLink register = new RouterLink("register", RegisterView.class);
 
@@ -52,14 +57,5 @@ public class LoginView extends Div {
         );
         box.addClassName("login-box");
         return box;
-    }
-
-    private void login(String username, String password) {
-        userService.find(
-                new User.Builder()
-                .username(username)
-                .password(password)
-                .build()
-        );
     }
 }

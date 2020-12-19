@@ -18,6 +18,7 @@ import com.vaadin.flow.server.PWA;
 import pl.lukinio.bookie.views.about.AboutView;
 import pl.lukinio.bookie.views.home.HomeView;
 import pl.lukinio.bookie.views.login.LoginView;
+import pl.lukinio.bookie.views.login.LogoutView;
 
 import java.util.Optional;
 
@@ -78,6 +79,7 @@ public class MainView extends AppLayout {
                 createTab("Home", HomeView.class),
                 createTab("About Me", AboutView.class),
                 createTab("Sign in/up", LoginView.class),
+                createTab("Logout", LogoutView.class),
         };
     }
 
