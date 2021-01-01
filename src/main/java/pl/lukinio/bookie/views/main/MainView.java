@@ -15,10 +15,9 @@ import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
-import pl.lukinio.bookie.views.about.AboutView;
-import pl.lukinio.bookie.views.home.HomeView;
-import pl.lukinio.bookie.views.login.LoginView;
-import pl.lukinio.bookie.views.login.LogoutView;
+import com.vaadin.flow.server.VaadinSession;
+import pl.lukinio.bookie.data.entity.Anonymous;
+import pl.lukinio.bookie.data.entity.UserBase;
 
 import java.util.Optional;
 
@@ -67,20 +66,21 @@ public class MainView extends AppLayout {
         return header;
     }
 
-    private static Tabs createMenuTabs() {
+    private Tabs createMenuTabs() {
         final Tabs tabs = new Tabs();
         tabs.getStyle().set("max-width", "100%");
         tabs.add(getAvailableTabs());
         return tabs;
     }
 
-    private static Tab[] getAvailableTabs() {
-        return new Tab[]{
-                createTab("Home", HomeView.class),
-                createTab("About Me", AboutView.class),
-                createTab("Sign in/up", LoginView.class),
-                createTab("Logout", LogoutView.class),
-        };
+    private Tab[] getAvailableTabs() {
+        UserBase user = VaadinSession.getCurrent().getAttribute(UserBase.class);
+        if (user == null){
+            user = new Anonymous();
+        }
+        return user.getRoutes().stream()
+                .map(r -> createTab(r.getValue0(), r.getValue1()))
+                .toArray(Tab[]::new);
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {

@@ -1,6 +1,6 @@
 package pl.lukinio.bookie.views.login;
 
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
@@ -11,12 +11,11 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
 import org.springframework.beans.factory.annotation.Autowired;
-import pl.lukinio.bookie.data.entity.Role;
-import pl.lukinio.bookie.data.entity.User;
 import pl.lukinio.bookie.data.service.UserService;
 import pl.lukinio.bookie.views.main.MainView;
+
+import static com.vaadin.flow.component.notification.Notification.Position.TOP_CENTER;
 
 @Route(value = "register", layout = MainView.class)
 @PageTitle("Registration")
@@ -24,70 +23,55 @@ import pl.lukinio.bookie.views.main.MainView;
 public class RegisterView extends Div {
     @Autowired
     private final transient UserService userService;
+    private final TextField username;
+    private final PasswordField password;
+    private final PasswordField confirmPassword;
+    private final EmailField email;
+    private final Button button;
+
     public RegisterView(UserService userService){
         addClassName("register-view");
         this.userService = userService;
-        add(registerBox());
+        username = new TextField();
+        password = new PasswordField();
+        confirmPassword = new PasswordField();
+        email = new EmailField();
+        button = new Button("Register", this::handleRegister);
+
+        initialize();
+
+        VerticalLayout box = new VerticalLayout(username, password, confirmPassword, email, button);
+        box.addClassName("register-box");
+        add(box);
     }
 
-    private void register(String username, String password1, String password2, String email) {
-        if (username.trim().isEmpty()) {
-            Notification.show("Enter a username");
-        } else if (password1.isEmpty()) {
-            Notification.show("Enter a password");
-        } else if (!password1.equals(password2)) {
-            Notification.show("Passwords don't match");
-        } else if (email.trim().isEmpty()) {
-            Notification.show("Enter an email");
+    private void handleRegister(ClickEvent<Button> buttonClickEvent) {
+        if (username.getValue().trim().isEmpty()) {
+            Notification.show("Enter a username", 2500, TOP_CENTER);
+        } else if (password.getValue().isEmpty()) {
+            Notification.show("Enter a password", 2500, TOP_CENTER);
+        } else if (!password.getValue().equals(confirmPassword.getValue())) {
+            Notification.show("Passwords don't match", 2500, TOP_CENTER);
+        } else if (email.getValue().trim().isEmpty()) {
+            Notification.show("Enter an email", 2500, TOP_CENTER);
         } else {
-            User newUser = new User.Builder()
-                    .username(username)
-                    .password(password1)
-                    .role(Role.USER)
-                    .build();
-
-            if(userService.save(newUser)){
-                Notification.show("Registration succeeded.");
-                UI.getCurrent().navigate("home");
-            }else{
-                Notification.show("Registration fail. User exists");
-            }
+            userService.register(username.getValue(), password.getValue(), email.getValue());
         }
     }
 
-    private VerticalLayout registerBox(){
-        TextField username = new TextField();
+    private void initialize(){
         username.setPlaceholder("Username");
-        PasswordField password = new PasswordField();
         password.setPlaceholder("Password");
-        PasswordField confirmPassword = new PasswordField();
         confirmPassword.setPlaceholder("Confirm Password");
-        EmailField emailField = new EmailField();
-        emailField.setPlaceholder("example@example.pl");
-
-        Button button = new Button("Register",
-                e -> register(
-                        username.getValue(),
-                        password.getValue(),
-                        confirmPassword.getValue(),
-                        emailField.getValue()
-                ));
-
-        RouterLink login = new RouterLink("login", LoginView.class);
+        email.setPlaceholder("example@example.pl");
 
         username.setWidthFull();
         password.setWidthFull();
         confirmPassword.setWidthFull();
-        emailField.setWidthFull();
+        email.setWidthFull();
         button.setWidthFull();
         username.isRequired();
         password.isRequired();
         confirmPassword.isRequired();
-
-        VerticalLayout box = new VerticalLayout(
-                username, password, confirmPassword, emailField, button, login
-        );
-        box.addClassName("register-box");
-        return box;
     }
 }

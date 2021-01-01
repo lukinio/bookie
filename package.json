@@ -60,7 +60,12 @@
     "raw-loader": "3.1.0",
     "compression-webpack-plugin": "4.0.1",
     "terser": "4.6.7",
-    "chokidar": "^3.4.0"
+    "chokidar": "^3.4.0",
+    "script-ext-html-webpack-plugin": "2.1.4",
+    "awesome-typescript-loader": "5.2.1",
+    "progress-webpack-plugin": "0.0.24",
+    "html-webpack-plugin": "3.2.0",
+    "typescript": "3.8.3"
   },
   "vaadin": {
     "dependencies": {
@@ -110,7 +115,8 @@
       "lit-element": "^2.2.1",
       "cdigit": "2.5.6",
       "chance": "1.1.7",
-      "open": "^7.2.1"
+      "open": "^7.2.1",
+      "@vaadin/router": "1.7.2"
     },
     "devDependencies": {
       "webpack-babel-multi-target-plugin": "2.3.3",
@@ -122,8 +128,13 @@
       "terser": "4.6.7",
       "webpack-merge": "4.2.2",
       "webpack-dev-server": "3.11.0",
-      "chokidar": "^3.4.0"
+      "chokidar": "^3.4.0",
+      "script-ext-html-webpack-plugin": "2.1.4",
+      "awesome-typescript-loader": "5.2.1",
+      "progress-webpack-plugin": "0.0.24",
+      "html-webpack-plugin": "3.2.0",
+      "typescript": "3.8.3"
     },
-    "hash": "f7b8023cce5a7f25eb7578fdd8219805a297674e65908ecd9e7ee462293cbb23"
+    "hash": "c88e20d613ef50e4cc77e2959ad9b403f11e4682f1a4a29ae2b98ec19bd278f7"
   }
 }

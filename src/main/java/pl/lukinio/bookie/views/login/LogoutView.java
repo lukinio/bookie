@@ -5,13 +5,16 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
+import pl.lukinio.bookie.data.entity.Anonymous;
+import pl.lukinio.bookie.data.entity.UserBase;
 
-@Route(value = "logout")
+@Route(value = "logout", registerAtStartup = false)
 @PageTitle("Logout")
 public class LogoutView extends Div {
     public LogoutView() {
-        UI.getCurrent().getPage().setLocation("login");
-        VaadinSession.getCurrent().getSession().invalidate();
-        VaadinSession.getCurrent().close();
+        UI.getCurrent().getPage().setLocation("home");
+        UserBase anon = new Anonymous();
+        anon.setAvailableRoutes();
+        VaadinSession.getCurrent().setAttribute(UserBase.class, anon);
     }
 }

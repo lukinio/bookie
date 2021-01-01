@@ -6,7 +6,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import pl.lukinio.bookie.views.main.MainView;
 
-@Route(value = "about", layout = MainView.class)
+@Route(value = "about", layout = MainView.class, registerAtStartup = false)
 @PageTitle("About")
 public class AboutView extends Div {
 
