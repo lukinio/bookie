@@ -5,8 +5,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
-import pl.lukinio.bookie.data.entity.Anonymous;
-import pl.lukinio.bookie.data.entity.UserBase;
+import pl.lukinio.bookie.data.entity.users.Anonymous;
+import pl.lukinio.bookie.data.entity.users.UserBase;
 
 @Route(value = "logout", registerAtStartup = false)
 @PageTitle("Logout")

@@ -6,8 +6,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.lukinio.bookie.data.entity.User;
-import pl.lukinio.bookie.data.entity.UserBase;
+import pl.lukinio.bookie.data.entity.users.User;
+import pl.lukinio.bookie.data.entity.users.UserBase;
 import pl.lukinio.bookie.data.repository.UserRepository;
 import pl.lukinio.bookie.views.login.LoginView;
 

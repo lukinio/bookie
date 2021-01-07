@@ -14,10 +14,8 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabVariant;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.server.VaadinSession;
-import pl.lukinio.bookie.data.entity.Anonymous;
-import pl.lukinio.bookie.data.entity.UserBase;
+import com.vaadin.flow.server.*;
+import pl.lukinio.bookie.data.entity.users.UserBase;
 
 import java.util.Optional;
 
@@ -75,9 +73,6 @@ public class MainView extends AppLayout {
 
     private Tab[] getAvailableTabs() {
         UserBase user = VaadinSession.getCurrent().getAttribute(UserBase.class);
-        if (user == null){
-            user = new Anonymous();
-        }
         return user.getRoutes().stream()
                 .map(r -> createTab(r.getValue0(), r.getValue1()))
                 .toArray(Tab[]::new);

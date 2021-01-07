@@ -1,10 +1,12 @@
-package pl.lukinio.bookie.data.entity;
+package pl.lukinio.bookie.data.entity.users;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.router.RouteConfiguration;
+import org.hibernate.annotations.DynamicUpdate;
 import org.javatuples.Pair;
 import pl.lukinio.bookie.views.about.AboutView;
 import pl.lukinio.bookie.views.admin.AdminView;
+import pl.lukinio.bookie.views.betting.BetView;
 import pl.lukinio.bookie.views.home.HomeView;
 import pl.lukinio.bookie.views.login.LoginView;
 import pl.lukinio.bookie.views.login.LogoutView;
@@ -18,12 +20,14 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@DiscriminatorValue("ADMIN")
-public class Admin extends UserBase{
-    public Admin(String username, String password, String email){
-        super(username, password, email, "ADMIN");
+@DiscriminatorValue("USER")
+@DynamicUpdate
+public class User extends UserBase {
+
+    public User(String username, String password, String email){
+        super(username, password, email, "USER");
     }
-    public Admin(){
+    public User(){
         /* default constructor for JPA */
         super();
     }
@@ -33,9 +37,9 @@ public class Admin extends UserBase{
         RouteConfiguration configuration = RouteConfiguration.forSessionScope();
         configuration.setAnnotatedRoute(AboutView.class);
         configuration.setAnnotatedRoute(LogoutView.class);
-        configuration.setAnnotatedRoute(AdminView.class);
         configuration.removeRoute(LoginView.class);
         configuration.removeRoute(RegisterView.class);
+        configuration.removeRoute(AdminView.class);
     }
 
     @Override
@@ -43,7 +47,7 @@ public class Admin extends UserBase{
         ArrayList<Pair<String,  Class<? extends Component>>> routes = new ArrayList<>();
         routes.add(new Pair<>("Home", HomeView.class));
         routes.add(new Pair<>("About", AboutView.class));
-        routes.add(new Pair<>("Admin", AdminView.class));
+        routes.add(new Pair<>("Bet", BetView.class));
         routes.add(new Pair<>("Logout", LogoutView.class));
         return routes;
     }

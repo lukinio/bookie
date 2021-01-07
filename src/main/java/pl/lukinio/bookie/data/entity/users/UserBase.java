@@ -1,4 +1,4 @@
-package pl.lukinio.bookie.data.entity;
+package pl.lukinio.bookie.data.entity.users;
 
 import com.vaadin.flow.component.Component;
 import org.javatuples.Pair;
@@ -17,11 +17,11 @@ public abstract class UserBase implements Serializable {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
-    @Column protected String username;
-    @Column protected String password;
-    @Column protected String email;
+    @Column private String username;
+    @Column private String password;
+    @Column private String email;
     @Column(name = "role", insertable = false, updatable = false)
-    protected String role;
+    private String role;
 
     UserBase(String username, String password, String email, String role){
         this.username = username;
@@ -92,6 +92,6 @@ public abstract class UserBase implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("User[username='%s', email='%s']", username, email);
+        return String.format("User[username='%s', email='%s, role=%s']", username, email, role);
     }
 }

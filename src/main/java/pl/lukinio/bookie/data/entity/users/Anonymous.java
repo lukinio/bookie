@@ -1,10 +1,11 @@
-package pl.lukinio.bookie.data.entity;
+package pl.lukinio.bookie.data.entity.users;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.router.RouteConfiguration;
 import org.javatuples.Pair;
 import pl.lukinio.bookie.views.about.AboutView;
 import pl.lukinio.bookie.views.admin.AdminView;
+import pl.lukinio.bookie.views.betting.BetView;
 import pl.lukinio.bookie.views.home.HomeView;
 import pl.lukinio.bookie.views.login.LoginView;
 import pl.lukinio.bookie.views.login.LogoutView;
@@ -32,6 +33,7 @@ public class Anonymous extends UserBase {
     public List<Pair<String,  Class<? extends Component>>> getRoutes(){
         ArrayList<Pair<String,  Class<? extends Component>>> routes = new ArrayList<>();
         routes.add(new Pair<>("Home", HomeView.class));
+        routes.add(new Pair<>("Bet", BetView.class));
         routes.add(new Pair<>("Login", LoginView.class));
         routes.add(new Pair<>("Register", RegisterView.class));
         return routes;
